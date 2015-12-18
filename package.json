@@ -1,0 +1,32 @@
+{
+  "name": "dolman",
+  "version": "0.0.1",
+  "description": "A light wrapper for building an API with express comfortably.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test/endpoint.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yomguithereal/dolman.git"
+  },
+  "keywords": [
+    "express",
+    "api",
+    "server"
+  ],
+  "contributors": [
+    {
+      "name": "Guillaume Plique",
+      "url": "http://github.com/Yomguithereal"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yomguithereal/dolman/issues"
+  },
+  "homepage": "https://github.com/yomguithereal/dolman#readme",
+  "dependencies": {
+    "typology": "^1.0.0"
+  }
+}
