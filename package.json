@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/yomguithereal/dolman#readme",
   "dependencies": {
-    "object-assign": "^4.0.1",
-    "typology": "^1.0.0"
+    "object-assign": "4.0.1",
+    "typology": "1.0.0"
   }
 }
