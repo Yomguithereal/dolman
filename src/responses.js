@@ -12,11 +12,30 @@ module.exports = function(express) {
    * Ok.
    */
   response.ok = function(result) {
-    var data = {
+    var response = {
       status: 'ok',
+      statusCode: 200,
       result: result
     };
 
     return this.json(data);
+  };
+
+  /**
+   * Bad request.
+   */
+  response.badRequest = function(expecting) {
+    var response = {
+      status: 'ok',
+      statusCode: 400,
+      error: {
+        title: 'Bad Request'
+      }
+    };
+
+    if (expecting)
+      response.error.expecting = expecting;
+
+    return this.status(400).json(response);
   };
 };
