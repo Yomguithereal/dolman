@@ -14,7 +14,7 @@ module.exports = function(express) {
   response.ok = function(result) {
     var response = {
       status: 'ok',
-      statusCode: 200,
+      code: 200,
       result: result
     };
 
@@ -26,10 +26,10 @@ module.exports = function(express) {
    */
   response.badRequest = function(expecting) {
     var response = {
-      status: 'ok',
-      statusCode: 400,
+      status: 'error',
+      code: 400,
       error: {
-        title: 'Bad Request'
+        message: 'Bad Request'
       }
     };
 
@@ -37,5 +37,66 @@ module.exports = function(express) {
       response.error.expecting = expecting;
 
     return this.status(400).json(response);
+  };
+
+  /**
+   * Server Error.
+   */
+  response.serverError = function(err) {
+
+    // TEMP: dev logging
+    console.log(err);
+
+    this.status(500).json({
+      status: 'error',
+      code: 500,
+      error: {
+        message: 'Internal Server Error'
+      }
+    });
+  };
+
+  /**
+   * Not Found.
+   */
+  response.notFound = function(reason) {
+    var response = {
+      status: 'error',
+      code: 404,
+      error: {
+        message: 'Not Found'
+      }
+    };
+
+    if (reason)
+      response.error.reason = reason;
+
+    this.status(404).json(response);
+  };
+
+  /**
+   * Unauthorized.
+   */
+  express.response.unauthorized = function() {
+    this.status(401).json({
+      status: 'error',
+      code: 401,
+      error: {
+        message: 'Unauthorized'
+      }
+    });
+  };
+
+  /**
+   * Forbidden.
+   */
+  express.response.forbidden = function() {
+    this.status(403).json({
+      status: 'error',
+      code: 403,
+      error: {
+        message: 'Forbidden'
+      }
+    });
   };
 };
