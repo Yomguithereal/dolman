@@ -18,7 +18,20 @@ module.exports = function(express) {
       result: result
     };
 
-    return this.json(data);
+    return this.json(response);
+  };
+
+  /**
+   * Created.
+   */
+  response.created = function(result) {
+    var response = {
+      status: 'ok',
+      code: 201,
+      result: result
+    };
+
+    return this.json(response);
   };
 
   /**
