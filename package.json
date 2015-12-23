@@ -4,7 +4,7 @@
   "description": "A light wrapper for building an API with express comfortably.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./test/endpoint.js"
+    "test": "mocha ./test/unit.js"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "typology": "1.0.0"
   },
   "devDependencies": {
+    "express": "^4.13.3",
     "mocha": "^2.3.4",
     "supertest": "^1.1.0"
   }

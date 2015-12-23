@@ -17,6 +17,5 @@ function params(req) {
  * Exporting.
  */
 module.exports = {
-  param: param,
   params: params
 };
