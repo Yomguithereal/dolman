@@ -35,6 +35,19 @@ module.exports = function(express) {
   };
 
   /**
+   * Not Modified.
+   */
+  response.notModified = function(result) {
+    var response = {
+      status: 'ok',
+      code: 304,
+      result: result
+    };
+
+    return this.status(304).json(response);
+  };
+
+  /**
    * Bad request.
    */
   response.badRequest = function(expecting) {
