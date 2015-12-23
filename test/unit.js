@@ -16,17 +16,17 @@ describe('Responses', function() {
 
   it('express\'s responses should have been enhanced.', function() {
     var RESPONSES = [
-      'ok',
-      'created',
-      'badRequest',
-      'serverError',
-      'notFound',
-      'unauthorized',
-      'forbidden'
+      {method: 'ok'},
+      {method: 'created'},
+      {method: 'badRequest'},
+      {method: 'serverError'},
+      {method: 'notFound'},
+      {method: 'unauthorized'},
+      {method: 'forbidden'}
     ];
 
-    RESPONSES.forEach(function(key) {
-      assert(typeof express.response[key] === 'function');
+    RESPONSES.forEach(function(response) {
+      assert(typeof express.response[response.method] === 'function');
     });
   });
 });
@@ -35,5 +35,6 @@ describe('Responses', function() {
  * Router.
  */
 describe('Router', function() {
-
+  // API
+  // WORKING
 });
