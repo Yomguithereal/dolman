@@ -12,6 +12,9 @@ var responses = require('./src/responses.js'),
 module.exports = function(express, opts) {
   opts = opts || {};
 
+  // Applying responses to express
+  responses(express);
+
   // Building internal typology
   var types;
 
@@ -20,8 +23,8 @@ module.exports = function(express, opts) {
   else
     types = new Typology(opts.typology || {});
 
-  // Applying responses to express
-  responses(express);
+  // Internal RAM cache
+  var cache = {};
 
   // Building the router function
   function makeRouter(routes, o) {
@@ -60,7 +63,7 @@ module.exports = function(express, opts) {
     });
 
     return router;
-  };
+  }
 
   // Returning an object to handle
   return {
