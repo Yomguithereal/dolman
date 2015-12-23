@@ -31,7 +31,7 @@ module.exports = function(express) {
       result: result
     };
 
-    return this.json(response);
+    return this.status(201).json(response);
   };
 
   /**
@@ -58,7 +58,8 @@ module.exports = function(express) {
   response.serverError = function(err) {
 
     // TEMP: dev logging
-    console.log(err);
+    if (err)
+      console.log(err);
 
     this.status(500).json({
       status: 'error',
