@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "async": "^1.5.0",
+    "body-parser": "^1.14.2",
     "express": "^4.13.3",
     "mocha": "^2.3.4",
     "supertest": "^1.1.0"

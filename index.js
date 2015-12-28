@@ -21,7 +21,7 @@ module.exports = function(express, opts) {
   if (opts.typology instanceof Typology)
     types = opts.typology;
   else
-    types = new Typology(opts.typology || {});
+    types = new Typology(opts.typology || {});
 
   // Internal RAM cache
   var cache = {};
@@ -42,7 +42,7 @@ module.exports = function(express, opts) {
         throw Error('dolman.router: the route for url ' + route.url + ' has no action.');
 
       // Applying before middlewares
-      var routeMiddlewares = before;
+      var routeMiddlewares = [].concat(before);
 
       // Validation
       if (route.validate)
@@ -52,12 +52,14 @@ module.exports = function(express, opts) {
       routeMiddlewares = routeMiddlewares.concat(after);
 
       // Determining the method
-      var methods = [].concat(route.method || route.methods || 'GET');
+      var methods = [].concat(route.method || route.methods || 'ALL');
 
       methods.forEach(function(method) {
         router[method.toLowerCase()].apply(
           router,
-          [route.url].concat(routeMiddlewares).concat(route.action)
+          [route.url]
+            .concat(routeMiddlewares)
+            .concat(route.action)
         );
       });
     });

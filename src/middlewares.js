@@ -16,16 +16,27 @@ function validate(types, def) {
         i,
         l;
 
-    for (var i = 0, l = sources; i < l; i++) {
+    for (i = 0, l = sources.length; i < l; i++) {
       source = sources[i];
 
-      if (def[source] && !types.check(def[source], req[source]))
-        return res.badRequest({
+      if (def[source] && !types.check(def[source], req[source])) {
+        var reason = {
           source: source,
-          expecting: def[source]
-        });
+          expecting: def[source],
+          sent: req[source] || {}
+        };
+
+        if (source === 'params')
+          reason.path = req.route.path;
+
+        return res.badRequest(reason);
+      }
     }
 
     return next();
   };
+};
+
+module.exports = {
+  validate: validate
 };

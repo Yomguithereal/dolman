@@ -50,7 +50,7 @@ module.exports = function(express) {
   /**
    * Bad request.
    */
-  response.badRequest = function(expecting) {
+  response.badRequest = function(reason) {
     var response = {
       status: 'error',
       code: 400,
@@ -59,46 +59,10 @@ module.exports = function(express) {
       }
     };
 
-    if (expecting)
-      response.error.expecting = expecting;
-
-    return this.status(400).json(response);
-  };
-
-  /**
-   * Server Error.
-   */
-  response.serverError = function(err) {
-
-    // TEMP: dev logging
-    if (err)
-      console.log(err);
-
-    this.status(500).json({
-      status: 'error',
-      code: 500,
-      error: {
-        message: 'Internal Server Error'
-      }
-    });
-  };
-
-  /**
-   * Not Found.
-   */
-  response.notFound = function(reason) {
-    var response = {
-      status: 'error',
-      code: 404,
-      error: {
-        message: 'Not Found'
-      }
-    };
-
     if (reason)
       response.error.reason = reason;
 
-    this.status(404).json(response);
+    return this.status(400).json(response);
   };
 
   /**
@@ -123,6 +87,42 @@ module.exports = function(express) {
       code: 403,
       error: {
         message: 'Forbidden'
+      }
+    });
+  };
+
+  /**
+   * Not Found.
+   */
+  response.notFound = function(reason) {
+    var response = {
+      status: 'error',
+      code: 404,
+      error: {
+        message: 'Not Found'
+      }
+    };
+
+    if (reason)
+      response.error.reason = reason;
+
+    this.status(404).json(response);
+  };
+
+  /**
+   * Server Error.
+   */
+  response.serverError = function(err) {
+
+    // TEMP: dev logging
+    if (err)
+      console.log(err);
+
+    this.status(500).json({
+      status: 'error',
+      code: 500,
+      error: {
+        message: 'Internal Server Error'
       }
     });
   };
