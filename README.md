@@ -39,7 +39,7 @@ var dolman = require(express, {typology: myCustomTypology});
 
 ### Responses
 
-A wrapped express app will have an enhanced repsonse object:
+A wrapped express app will have an enhanced response object:
 
 ```js
 var app = express();
