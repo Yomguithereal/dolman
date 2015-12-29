@@ -18,6 +18,9 @@ module.exports = function(express) {
       result: result
     };
 
+    if (this.__shouldBeCached)
+      this.__sentData = result;
+
     return this.json(response);
   };
 
@@ -31,20 +34,10 @@ module.exports = function(express) {
       result: result
     };
 
+    if (this.__shouldBeCached)
+      this.__sentData = result;
+
     return this.status(201).json(response);
-  };
-
-  /**
-   * Not Modified.
-   */
-  response.notModified = function(result) {
-    var response = {
-      status: 'ok',
-      code: 304,
-      result: result
-    };
-
-    return this.status(304).json(response);
   };
 
   /**

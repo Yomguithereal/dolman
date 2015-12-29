@@ -38,7 +38,6 @@ describe('Responses', function() {
   var RESPONSES = [
     {method: 'ok', code: 200},
     {method: 'created', code: 201},
-    {method: 'notModified', code: 304},
     {method: 'badRequest', code: 400},
     {method: 'unauthorized', code: 401},
     {method: 'forbidden', code: 403},
@@ -291,8 +290,88 @@ describe('Router', function() {
     }, done);
   });
 
-  it('cache middleware should work.', function() {
+  it('cache middleware should work.', function(done) {
+    var app = express(),
+        one = 0,
+        two = 0;
 
+    var router = dolman.router([
+      {
+        url: '/one',
+        cache: 'one',
+        action: function(req, res) {
+          one++;
+          return res.ok({hello: 'world'});
+        }
+      },
+      {
+        url: '/two',
+        cache: {
+          key: 'two',
+          hasher: function(req) {
+            return req.query.title;
+          }
+        },
+        action: function(req, res) {
+          two++;
+          return res.ok({title: req.query.title});
+        }
+      }
+    ]);
+
+    app.use(router);
+
+    async.series({
+      one: function(next) {
+        request(app)
+          .get('/one')
+          .expect(200, {
+            code: 200,
+            status: 'ok',
+            result: {
+              hello: 'world'
+            }
+          }, next);
+      },
+      oneCached: function(next) {
+        request(app)
+          .get('/one')
+          .expect(200, {
+            code: 200,
+            status: 'ok',
+            result: {
+              hello: 'world'
+            }
+          }, next);
+      },
+      two: function(next) {
+        request(app)
+          .get('/two?title=world')
+          .expect(200, {
+            code: 200,
+            status: 'ok',
+            result: {
+              title: 'world'
+            }
+          }, next);
+      },
+      twoCached: function(next) {
+        request(app)
+          .get('/two?title=world')
+          .expect(200, {
+            code: 200,
+            status: 'ok',
+            result: {
+              title: 'world'
+            }
+          }, next);
+      },
+      count: function(next) {
+        assert(one === 1);
+        assert(two === 1);
+        return next();
+      }
+    }, done);
   });
 
   it('before middleware should work.', function() {

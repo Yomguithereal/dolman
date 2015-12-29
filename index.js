@@ -48,6 +48,10 @@ module.exports = function(express, opts) {
       if (route.validate)
         routeMiddlewares.push(middlewares.validate(types, route.validate));
 
+      // Cache
+      if (route.cache)
+        routeMiddlewares.push(middlewares.cache(cache, route.cache));
+
       // Applying after middlewares
       routeMiddlewares = routeMiddlewares.concat(after);
 

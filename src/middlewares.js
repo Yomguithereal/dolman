@@ -6,6 +6,42 @@
  */
 
 /**
+ * Creating a caching middleware.
+ */
+function cache(store, params) {
+  if (typeof params === 'string')
+    params = {key: params};
+
+  var key = params.key,
+      hasher = typeof params.hasher === 'function' ?
+        params.hasher :
+        function() { return '$nohash$'; };
+
+  // Initializing the store's key
+  store[key] = {};
+
+  return function(req, res, next) {
+    var hash = hasher(req);
+
+    // Do we have the data already?
+    if (hash in store[key])
+      return res.ok(store[key][hash]);
+
+    // Flagging
+    res.__shouldBeCached = true;
+
+    // Catching response
+    res.on('finish', function() {
+
+      store[key][hash] = res.__sentData;
+      delete res.__sentData;
+    });
+
+    return next();
+  };
+}
+
+/**
  * Factory building a validation middleware working for the given definition.
  */
 function validate(types, def) {
@@ -38,5 +74,6 @@ function validate(types, def) {
 };
 
 module.exports = {
+  cache: cache,
   validate: validate
 };
