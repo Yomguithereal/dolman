@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Yomguithereal/dolman.svg)](https://travis-ci.org/Yomguithereal/dolman)
+
 # Dolman
 
 **dolman** is a very light wrapper around an express app meaning to provide some comfortable utilities for one developing a REST API.
