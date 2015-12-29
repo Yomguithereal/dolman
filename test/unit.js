@@ -374,11 +374,11 @@ describe('Router', function() {
     }, done);
   });
 
-  it('before middleware should work.', function() {
+  // it('before middleware should work.', function() {
 
-  });
+  // });
 
-  it('before middleware on a single route should work.', function() {
+  // it('before middleware on a single route should work.', function() {
 
-  });
+  // });
 });

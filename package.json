@@ -1,7 +1,7 @@
 {
   "name": "dolman",
-  "version": "0.0.1",
-  "description": "A light wrapper for building an API with express comfortably.",
+  "version": "0.0.2",
+  "description": "Light express app wrapper to develop an API comfortably.",
   "main": "index.js",
   "scripts": {
     "test": "mocha ./test/unit.js"
