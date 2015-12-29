@@ -31,7 +31,6 @@ module.exports = function(express, opts) {
     o = o || {};
 
     var router = express.Router(),
-        before = [].concat(o.before || []),
         after = [].concat(o.after || []);
 
     routes.forEach(function(route) {
@@ -42,7 +41,7 @@ module.exports = function(express, opts) {
         throw Error('dolman.router: the route for url ' + route.url + ' has no action.');
 
       // Applying before middlewares
-      var routeMiddlewares = [].concat(before);
+      var routeMiddlewares = [];
 
       // Validation
       if (route.validate)
