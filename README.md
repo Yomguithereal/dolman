@@ -12,6 +12,7 @@ As such, dolman overload express' response object to provide handy methods such 
   * [Responses](#responses)
   * [Router](#router)
 * [What on earth is a dolman?](#explanation)
+* [Roadmap](#roadmap)
 * [License](#license)
 
 ## Installation
@@ -106,6 +107,8 @@ var router = dolman.router([
 app.use(router);
 // or
 app.use('/prefix', router);
+// or, typically, if you need some kind of auth
+app.use('/prefix', authMiddleware, router);
 ```
 
 A route can be described likewise:
@@ -114,11 +117,11 @@ A route can be described likewise:
 {
   // [required] - The matching express pattern.
   // Remember that this could even be an array or a regex.
-  url: '/hello',
+  url: '/hello/:name',
 
   // [required] - The action to perform.
   action: function(req, res) {
-    return res.ok({hello: 'world'});
+    return res.ok({hello: req.params.name});
   },
 
   // [optional] - The accepted methods.
@@ -126,13 +129,50 @@ A route can be described likewise:
   method: 'POST',
 
   // The following also works:
-  methods: ['POST', 'PUT']
+  methods: ['POST', 'PUT'],
+
+  // [optional] - Validation for params, query and body.
+  validate: {
+    params: {
+      name: 'string'
+    },
+    query: {
+      age: '?number'
+    },
+    body: {
+      title: 'string',
+      content: {
+        id: '?number',
+        text: 'string'
+      }
+    }
+  },
+
+  // [optional] - Cache specifications
+  cache: 'hello',
+
+  // Or, if the cached response is relative to the request's parameters:
+  cache: {
+    key: 'hello',
+    hasher: function(req) {
+      return req.params.name;
+    }
+  }
 }
 ```
+
+Note that the validation specifications are handled by the [typology](https://github.com/jacomyal/typology) library.
 
 <h2 id="explanation">What on earth is a dolman?</h2>
 
 A [dolman](https://en.wikipedia.org/wiki/Dolman) is a loose garment with narrow sleeves, an opening in the front and lavish braids. While originating from Turkey, this garment was mostly worn as a jacket by hussars.
+
+## Roadmap
+
+* Declarative way to transform some params?
+* Default values for data?
+* Object polymorphism for the controller?
+* Ways to clear the cache.
 
 ## License
 
