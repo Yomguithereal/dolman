@@ -290,7 +290,7 @@ describe('Router', function() {
     }, done);
   });
 
-  it('cache middleware should work.', function(done) {
+  it('RAM cache middleware should work.', function(done) {
     var app = express(),
         one = 0,
         two = 0;
@@ -298,7 +298,7 @@ describe('Router', function() {
     var router = dolman.router([
       {
         url: '/one',
-        cache: 'one',
+        ramCache: 'one',
         action: function(req, res) {
           one++;
           return res.ok({hello: 'world'});
@@ -306,7 +306,7 @@ describe('Router', function() {
       },
       {
         url: '/two',
-        cache: {
+        ramCache: {
           key: 'two',
           hasher: function(req) {
             return req.query.title;

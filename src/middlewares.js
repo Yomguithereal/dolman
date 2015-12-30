@@ -6,9 +6,9 @@
  */
 
 /**
- * Creating a caching middleware.
+ * Creating a RAM caching middleware.
  */
-function cache(store, params) {
+function ramCache(store, params) {
   if (typeof params === 'string')
     params = {key: params};
 
@@ -74,6 +74,6 @@ function validate(types, def) {
 };
 
 module.exports = {
-  cache: cache,
+  ramCache: ramCache,
   validate: validate
 };
