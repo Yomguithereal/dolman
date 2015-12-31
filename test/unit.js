@@ -374,7 +374,7 @@ describe('Router', function() {
     }, done);
   });
 
-  it('HTTP cache middleware should work.', function() {
+  it('HTTP cache middleware should work.', function(done) {
     var app = express();
 
     var val1 = 'private, max-age=3600',
@@ -384,48 +384,40 @@ describe('Router', function() {
         val5 = 'public, max-age=259200', // 3 days
         val6 = 'public, max-age=2419200'; // 4 weeks
 
+    var action = function(req, res) {
+      return res.ok();
+    };
+
     var router = dolman.router([
       {
         url: '/string',
         httpCache: val1,
-        action: function(req, res) {
-          return res.ok();
-        }
+        action: action
       },
       {
         url: '/seconds',
         httpCache: {seconds: 59},
-        action: function(req, res) {
-          return res.ok();
-        }
+        action: action
       },
       {
         url: '/minutes',
         httpCache: {minutes: 1},
-        action: function(req, res) {
-          return res.ok();
-        }
+        action: action
       },
       {
         url: '/hours',
         httpCache: {hours: 2},
-        action: function(req, res) {
-          return res.ok();
-        }
+        action: action
       },
       {
         url: '/days',
         httpCache: {days: 3},
-        action: function(req, res) {
-          return res.ok();
-        }
+        action: action
       },
       {
         url: '/weeks',
         httpCache: {weeks: 4},
-        action: function(req, res) {
-          return res.ok();
-        }
+        action: action
       }
     ]);
 
@@ -435,52 +427,34 @@ describe('Router', function() {
       stringParam: function(next) {
         request(app)
           .get('/string')
-          .expect(function(res) {
-            assert(res.get('Cache-Control'), val1);
-            next();
-          });
+          .expect('Cache-Control', val1, next);
       },
       seconds: function(next) {
         request(app)
-          .get('seconds')
-          .expect(function(res) {
-            assert(res.get('Cache-Control'), val2);
-            next();
-          });
+          .get('/seconds')
+          .expect('Cache-Control', val2, next);
       },
       minutes: function(next) {
         request(app)
-          .get('minutes')
-          .expect(function(res) {
-            assert(res.get('Cache-Control'), val3);
-            next();
-          });
+          .get('/minutes')
+          .expect('Cache-Control', val3, next);
       },
       hours: function(next) {
         request(app)
-          .get('hours')
-          .expect(function(res) {
-            assert(res.get('Cache-Control'), val4);
-            next();
-          });
+          .get('/hours')
+          .expect('Cache-Control', val4, next);
       },
       days: function(next) {
         request(app)
-          .get('days')
-          .expect(function(res) {
-            assert(res.get('Cache-Control'), val5);
-            next();
-          });
+          .get('/days')
+          .expect('Cache-Control', val5, next);
       },
       weeks: function(next) {
         request(app)
-          .get('weeks')
-          .expect(function(res) {
-            assert(res.get('Cache-Control'), val6);
-            next();
-          });
+          .get('/weeks')
+          .expect('Cache-Control', val6, next);
       }
-    });
+    }, done);
   });
 
   // it('before middleware should work.', function() {
