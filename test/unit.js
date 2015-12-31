@@ -377,12 +377,12 @@ describe('Router', function() {
   it('HTTP cache middleware should work.', function(done) {
     var app = express();
 
-    var val1 = 'private, max-age=3600',
-        val2 = 'public, max-age=59', // 59 seconds
-        val3 = 'public, max-age=60', // 1 minute
-        val4 = 'public, max-age=7200', // 2 hours
-        val5 = 'public, max-age=259200', // 3 days
-        val6 = 'public, max-age=2419200'; // 4 weeks
+    var val1 = 'public, max-age=3600',
+        val2 = 'private, max-age=59', // 59 seconds
+        val3 = 'private, max-age=60', // 1 minute
+        val4 = 'private, max-age=7200', // 2 hours
+        val5 = 'private, max-age=259200', // 3 days
+        val6 = 'private, max-age=2419200'; // 4 weeks
 
     var action = function(req, res) {
       return res.ok();

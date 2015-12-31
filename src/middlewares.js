@@ -70,7 +70,7 @@ function httpCache(params) {
 
       if (factor > 0) {
         var maxAge = params[keys[factor]] * factor;
-        header = 'public, max-age=' + maxAge;
+        header = 'private, max-age=' + maxAge;
       }
     }
 
