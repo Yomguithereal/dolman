@@ -67,8 +67,11 @@ function httpCache(params) {
       });
     }
 
-    if (header)
+    if (header) {
       res.set('Cache-Control', header);
+    } else {
+      return next(new Error('Wrong parameter given for HTTP cache control'));
+    }
 
     return next();
   };
