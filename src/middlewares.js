@@ -8,7 +8,7 @@
 /**
  * Creating a RAM caching middleware.
  */
-function ramCache(store, params) {
+function cache(store, params) {
   if (typeof params === 'string')
     params = {key: params};
 
@@ -114,7 +114,7 @@ function validate(types, def) {
 };
 
 module.exports = {
-  ramCache: ramCache,
+  cache: cache,
   httpCache: httpCache,
   validate: validate
 };

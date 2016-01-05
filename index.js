@@ -24,7 +24,7 @@ module.exports = function(express, opts) {
     types = new Typology(opts.typology || {});
 
   // Internal RAM cache
-  var ramCache = {};
+  var cache = {};
 
   // Building the router function
   function makeRouter(routes, o) {
@@ -48,8 +48,8 @@ module.exports = function(express, opts) {
         routeMiddlewares.push(middlewares.validate(types, route.validate));
 
       // RAM cache
-      if (route.ramCache)
-        routeMiddlewares.push(middlewares.ramCache(ramCache, route.ramCache));
+      if (route.cache)
+        routeMiddlewares.push(middlewares.cache(cache, route.cache));
 
       // HTTP cache
       if (route.httpCache)
