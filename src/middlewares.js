@@ -53,25 +53,18 @@ function httpCache(params) {
 
     // If params is an object, use special properties
     // defined by API to set `max-age`.
-    if (params !== null &&
-       (typeof params === 'function') || typeof params === 'object') {
+    if (params !== null && typeof params === 'function' || typeof params === 'object') {
 
-      var factor = 0,
-          keys = {
-            '1': 'seconds', '60': 'minutes', '3600': 'hours',
-            '86400': 'days', '604800': 'weeks'
-          };
+      var durations = {
+        seconds: 1, minutes: 60, hours: 3600, days: 86400, weeks: 604800
+      };
 
-      params.hasOwnProperty('seconds') ? factor = 1 : factor;
-      params.hasOwnProperty('minutes') ? factor = 60 : factor;
-      params.hasOwnProperty('hours') ? factor = 3600 : factor;
-      params.hasOwnProperty('days') ? factor = 86400 : factor;
-      params.hasOwnProperty('weeks') ? factor = 604800 : factor;
-
-      if (factor > 0) {
-        var maxAge = params[keys[factor]] * factor;
-        header = 'private, max-age=' + maxAge;
-      }
+      Object.keys(durations).some(function(key) {
+        if (params.hasOwnProperty(key)) {
+          header = 'private, max-age=' + durations[key] * params[key];
+          return header;
+        }
+      });
     }
 
     if (header)

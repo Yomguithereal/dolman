@@ -298,7 +298,7 @@ describe('Router', function() {
     var router = dolman.router([
       {
         url: '/one',
-        ramCache: 'one',
+        cache: 'one',
         action: function(req, res) {
           one++;
           return res.ok({hello: 'world'});
@@ -306,7 +306,7 @@ describe('Router', function() {
       },
       {
         url: '/two',
-        ramCache: {
+        cache: {
           key: 'two',
           hasher: function(req) {
             return req.query.title;
