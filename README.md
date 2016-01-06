@@ -126,6 +126,12 @@ A route can be described likewise:
     return res.ok({hello: req.params.name});
   },
 
+  // [optional] - The route's name.
+  name: 'hello',
+
+  // [optional] - The route's description.
+  description: 'Say hello to someone.',
+
   // [optional] - The accepted methods.
   // If not provided, defaults to 'ALL'
   method: 'POST',
