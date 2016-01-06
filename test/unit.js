@@ -9,15 +9,14 @@ var Typology = require('typology'),
     bodyParser = require('body-parser'),
     request = require('supertest'),
     assert = require('assert'),
-    async = require('async');
+    async = require('async'),
+    wrap = require('../index.js');
 
 var customTypes = new Typology({
   custom: function(v) {
     return v === 'custom';
   }
 });
-
-var dolman = require('../index.js')(express, {typology: customTypes});
 
 /**
  * Helpers.
@@ -35,6 +34,8 @@ function makeApp(controller) {
  * Responses.
  */
 describe('Responses', function() {
+  var dolman = wrap(express);
+
   var RESPONSES = [
     {method: 'ok', code: 200},
     {method: 'created', code: 201},
@@ -74,6 +75,12 @@ describe('Responses', function() {
  * Router.
  */
 describe('Router', function() {
+  var dolman;
+
+  beforeEach(function() {
+    dolman = null;
+    dolman = wrap(express, {typology: customTypes});
+  });
 
   it('a route without url should throw.', function() {
     assert.throws(function() {
@@ -477,12 +484,49 @@ describe('Router', function() {
     assert.throws(setup, Error);
     request(app).get('/foo').end(done);
   });
-
-  // it('before middleware should work.', function() {
-
-  // });
-
-  // it('before middleware on a single route should work.', function() {
-
-  // });
 });
+
+/**
+ * Specifications.
+ */
+// describe('Specifications', function() {
+//   var dolman;
+
+//   beforeEach(function() {
+//     dolman = null;
+//     dolman = wrap(express);
+//   });
+
+//   it('should be possible to retrieve our app\'s specifications.', function() {
+//     var app = express();
+
+//     var router1 = dolman.router([
+//       {
+//         url: '/hello',
+//         name: 'hello',
+//         description: 'Say hello.',
+//         action: function(req, res) {
+//           return res.ok({hello: 'world'});
+//         }
+//       }
+//     ]);
+
+//     var router2 = dolman.router([
+//       {
+//         url: '/goodbye',
+//         name: 'goodbye',
+//         description: 'Good Bye.',
+//         action: function(req, res) {
+//           return res.ok({goodbye: 'world'});
+//         }
+//       }
+//     ]);
+
+//     app.use(router1);
+//     app.use('/nested', router2);
+
+//     var specs = dolman.specs(app);
+
+//     console.log(specs);
+//   });
+// });

@@ -31,10 +31,13 @@ npm install --save dolman
 
 ```js
 var express = require('express'),
-    dolman = require('dolman')(express, options);
+    wrap = require('dolman');
 
-// Example with a custom typology
-var dolman = require(express, {typology: myCustomTypology});
+// Wrapping express & providing some options:
+var dolman = wrap(express);
+
+// Example with a custom typology:
+var dolman = wrap(express, {typology: myCustomTypology});
 ```
 
 ### Responses

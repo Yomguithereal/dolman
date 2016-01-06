@@ -6,7 +6,10 @@
  */
 var responses = require('./src/responses.js'),
     middlewares = require('./src/middlewares.js'),
+    unescapeRegex = require('./src/unescape.js'),
+    HashMap = require('./src/hashmap.js'),
     Typology = require('typology'),
+    join = require('path').join,
     util = require('util');
 
 module.exports = function(express, opts) {
@@ -23,10 +26,15 @@ module.exports = function(express, opts) {
   else
     types = new Typology(opts.typology || {});
 
+  // Internal route register
+  var routesMap = new HashMap();
+
   // Internal RAM cache
   var cache = {};
 
-  // Building the router function
+  /**
+   * Router function.
+   */
   function makeRouter(routes, o) {
     o = o || {};
 
@@ -39,6 +47,9 @@ module.exports = function(express, opts) {
 
       if (!route.action)
         throw Error('dolman.router: the route for url ' + route.url + ' has no action.');
+
+      // Storing the route
+      routesMap.set(route.action, route);
 
       // Applying before middlewares
       var routeMiddlewares = [];
@@ -74,8 +85,45 @@ module.exports = function(express, opts) {
     return router;
   }
 
+  /**
+   * Specifications functions.
+   */
+  function specs(app) {
+    var routes = {};
+
+    // Reducing the app's recursive stack
+    function reduceStack(url, items, item) {
+      var subStack = [];
+
+      if (item.handle && item.handle.stack) {
+        var nextUrl = join(url, (item.path || unescapeRegex(item.regexp) || ''));
+        return items.concat(item.handle.stack.reduce(reduceStack.bind(null, nextUrl), []));
+      }
+
+      if (item.route) {
+        var nextUrl = join(url, (item.route.path || ''));
+        return items.concat(item.route.stack.reduce(reduceStack.bind(null, nextUrl), []));
+      }
+
+      return items.concat({
+        handle: item.handle,
+        url: url
+      });
+    }
+
+    // Filtering the actions coming from dolman
+    var stack = app._router.stack
+      .reduce(reduceStack.bind(null, ''), [])
+      .filter(function(item) {
+        return routesMap.get(item.handle);
+      });
+
+    return routes;
+  }
+
   // Returning an object to handle
   return {
-    router: makeRouter
+    router: makeRouter,
+    specs: specs
   };
 };
