@@ -164,7 +164,7 @@ A route can be described likewise:
   // [optional] You can leverage HTTP Cache-Control headers as well.
   httpCache: 'no-cache, no-store, must-revalidate',
 
-  // Or, shorthand and fluent to for 'private, max-age':
+  // Or, shorthand and fluent way to set 'private, max-age':
   httpCache: {
     hours: 2 // seconds, minutes, hours, days, weeks
   }
