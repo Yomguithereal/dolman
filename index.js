@@ -47,9 +47,13 @@ module.exports = function(express, opts) {
       if (route.validate)
         routeMiddlewares.push(middlewares.validate(types, route.validate));
 
-      // Cache
+      // RAM cache
       if (route.cache)
         routeMiddlewares.push(middlewares.cache(cache, route.cache));
+
+      // HTTP cache
+      if (route.httpCache)
+        routeMiddlewares.push(middlewares.httpCache(route.httpCache));
 
       // Applying after middlewares
       routeMiddlewares = routeMiddlewares.concat(after);

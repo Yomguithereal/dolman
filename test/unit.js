@@ -290,7 +290,7 @@ describe('Router', function() {
     }, done);
   });
 
-  it('cache middleware should work.', function(done) {
+  it('RAM cache middleware should work.', function(done) {
     var app = express(),
         one = 0,
         two = 0;
@@ -372,6 +372,110 @@ describe('Router', function() {
         return next();
       }
     }, done);
+  });
+
+  it('HTTP cache middleware should work.', function(done) {
+    var app = express();
+
+    var val1 = 'public, max-age=3600',
+        val2 = 'private, max-age=59', // 59 seconds
+        val3 = 'private, max-age=60', // 1 minute
+        val4 = 'private, max-age=7200', // 2 hours
+        val5 = 'private, max-age=259200', // 3 days
+        val6 = 'private, max-age=2419200'; // 4 weeks
+
+    var action = function(req, res) {
+      return res.ok();
+    };
+
+    var router = dolman.router([
+      {
+        url: '/string',
+        httpCache: val1,
+        action: action
+      },
+      {
+        url: '/seconds',
+        httpCache: {seconds: 59},
+        action: action
+      },
+      {
+        url: '/minutes',
+        httpCache: {minutes: 1},
+        action: action
+      },
+      {
+        url: '/hours',
+        httpCache: {hours: 2},
+        action: action
+      },
+      {
+        url: '/days',
+        httpCache: {days: 3},
+        action: action
+      },
+      {
+        url: '/weeks',
+        httpCache: {weeks: 4},
+        action: action
+      }
+    ]);
+
+    app.use(router);
+
+    async.series({
+      stringParam: function(next) {
+        request(app)
+          .get('/string')
+          .expect('Cache-Control', val1, next);
+      },
+      seconds: function(next) {
+        request(app)
+          .get('/seconds')
+          .expect('Cache-Control', val2, next);
+      },
+      minutes: function(next) {
+        request(app)
+          .get('/minutes')
+          .expect('Cache-Control', val3, next);
+      },
+      hours: function(next) {
+        request(app)
+          .get('/hours')
+          .expect('Cache-Control', val4, next);
+      },
+      days: function(next) {
+        request(app)
+          .get('/days')
+          .expect('Cache-Control', val5, next);
+      },
+      weeks: function(next) {
+        request(app)
+          .get('/weeks')
+          .expect('Cache-Control', val6, next);
+      }
+    }, done);
+  });
+
+  it('HTTP cache middle should throw an error on unexpected params.', function(done) {
+    var app = express();
+    var router;
+
+    function setup() {
+      router = dolman.router([
+        {
+          url: '/foo',
+          httpCache: {no: 'way'},
+          action: function(req, res) {
+            return res.ok();
+          }
+        }
+      ]);
+      app.use(router);
+    }
+
+    assert.throws(setup, Error);
+    request(app).get('/foo').end(done);
   });
 
   // it('before middleware should work.', function() {
