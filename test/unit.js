@@ -457,24 +457,25 @@ describe('Router', function() {
     }, done);
   });
 
-  it('HTTP cache middle should throw an error on unexpected params', function(done) {
+  it('HTTP cache middle should throw an error on unexpected params.', function(done) {
     var app = express();
+    var router;
 
-    var router = dolman.router([
-      {
-        url: '/foo',
-        httpCache: {no: 'way'},
-        action: function(req, res) {
-          return res.ok();
+    function setup() {
+      router = dolman.router([
+        {
+          url: '/foo',
+          httpCache: {no: 'way'},
+          action: function(req, res) {
+            return res.ok();
+          }
         }
-      }
-    ]);
+      ]);
+      app.use(router);
+    }
 
-    app.use(router);
-
-    request(app)
-      .get('/foo')
-      .end(done);
+    assert.throws(setup, Error);
+    request(app).get('/foo').end(done);
   });
 
   // it('before middleware should work.', function() {

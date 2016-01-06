@@ -45,34 +45,33 @@ function cache(store, params) {
  * Leveraging HTTP cache control.
  */
 function httpCache(params) {
+  var header = null;
+
+  if (typeof params === 'string') {
+    header = params;
+  } else
+
+  // If params is an object, use special properties
+  // defined by API to set `max-age`.
+  if (params !== null && typeof params === 'function' || typeof params === 'object') {
+    var durations = {
+      seconds: 1, minutes: 60, hours: 3600, days: 86400, weeks: 604800
+    };
+
+    Object.keys(durations).some(function(key) {
+      if (params.hasOwnProperty(key)) {
+        header = 'private, max-age=' + durations[key] * params[key];
+        return header;
+      }
+    });
+
+    if (!header) {
+      throw new Error('Wrong parameter given for HTTP cache control');
+    }
+  }
+
   return function(req, res, next) {
-    var header = null;
-
-    if (typeof params === 'string')
-      header = params;
-
-    // If params is an object, use special properties
-    // defined by API to set `max-age`.
-    if (params !== null && typeof params === 'function' || typeof params === 'object') {
-
-      var durations = {
-        seconds: 1, minutes: 60, hours: 3600, days: 86400, weeks: 604800
-      };
-
-      Object.keys(durations).some(function(key) {
-        if (params.hasOwnProperty(key)) {
-          header = 'private, max-age=' + durations[key] * params[key];
-          return header;
-        }
-      });
-    }
-
-    if (header) {
-      res.set('Cache-Control', header);
-    } else {
-      return next(new Error('Wrong parameter given for HTTP cache control'));
-    }
-
+    res.set('Cache-Control', header);
     return next();
   };
 }
