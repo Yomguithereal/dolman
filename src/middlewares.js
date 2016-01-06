@@ -47,9 +47,8 @@ function cache(store, params) {
 function httpCache(params) {
   var header = null;
 
-  if (typeof params === 'string') {
+  if (typeof params === 'string')
     header = params;
-  } else
 
   // If params is an object, use special properties
   // defined by API to set `max-age`.
@@ -65,9 +64,8 @@ function httpCache(params) {
       }
     });
 
-    if (!header) {
+    if (!header)
       throw new Error('Wrong parameter given for HTTP cache control');
-    }
   }
 
   return function(req, res, next) {
