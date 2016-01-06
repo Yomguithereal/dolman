@@ -162,7 +162,7 @@ A route can be described likewise:
   },
 
   // [optional] You can leverage HTTP Cache-Control headers as well.
-  httpCache: 'Cache-Control: no-cache, no-store, must-revalidate',
+  httpCache: 'no-cache, no-store, must-revalidate',
 
   // Or, shorthand and fluent to for 'private, max-age':
   httpCache: {
