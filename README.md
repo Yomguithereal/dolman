@@ -13,6 +13,7 @@ As such, dolman overload express' response object to provide handy methods such 
   * [Wrapping an express app](#wrapping-an-express-app)
   * [Responses](#responses)
   * [Router](#router)
+  * [Specs](#specs)
 * [What on earth is a dolman?](#explanation)
 * [Roadmap](#roadmap)
 * [License](#license)
@@ -181,6 +182,47 @@ A route can be described likewise:
 ```
 
 Note that the validation specifications are handled by the [typology](https://github.com/jacomyal/typology) library.
+
+## Specs
+
+**dolman** gives you the opportunity to retrieve very easily the specifications of your API if you need them, for instance, to hydrate a client elsewhere.
+
+The output will follow the [SPORE](https://github.com/SPORE/specifications) specifications.
+
+```js
+var express = require('express'),
+    wrap = require('dolman');
+
+var app = express(),
+    dolman = wrap(express);
+
+var router = dolman.router([
+  {
+    url: '/hello',
+    name: 'hello',
+    description: 'Say hello.',
+    action: function(req, res) {
+      return res.ok({hello: 'world'});
+    }
+  }
+]);
+
+app.use('/nested', router);
+
+dolman.specs(app);
+>>> {
+  formats: ['json'],
+  methods: {
+    hello: {
+      path: '/nested/hello',
+      name: 'hello',
+      description: 'Say hello.'
+    }
+  }
+}
+```
+
+Note that **dolman** will only output your routes having a name.
 
 <h2 id="explanation">What on earth is a dolman?</h2>
 
