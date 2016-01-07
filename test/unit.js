@@ -489,44 +489,69 @@ describe('Router', function() {
 /**
  * Specifications.
  */
-// describe('Specifications', function() {
-//   var dolman;
+describe('Specifications', function() {
+  var dolman;
 
-//   beforeEach(function() {
-//     dolman = null;
-//     dolman = wrap(express);
-//   });
+  beforeEach(function() {
+    dolman = null;
+    dolman = wrap(express);
+  });
 
-//   it('should be possible to retrieve our app\'s specifications.', function() {
-//     var app = express();
+  it('should be possible to retrieve our app\'s specifications.', function() {
+    var app = express();
 
-//     var router1 = dolman.router([
-//       {
-//         url: '/hello',
-//         name: 'hello',
-//         description: 'Say hello.',
-//         action: function(req, res) {
-//           return res.ok({hello: 'world'});
-//         }
-//       }
-//     ]);
+    var router1 = dolman.router([
+      {
+        url: '/hello',
+        name: 'hello',
+        description: 'Say hello.',
+        action: function(req, res) {
+          return res.ok({hello: 'world'});
+        }
+      },
+      {
+        url: '/greet/:name',
+        name: 'greet',
+        action: function(req, res) {
+          return res.ok({hello: req.params.name});
+        }
+      }
+    ]);
 
-//     var router2 = dolman.router([
-//       {
-//         url: '/goodbye',
-//         name: 'goodbye',
-//         description: 'Good Bye.',
-//         action: function(req, res) {
-//           return res.ok({goodbye: 'world'});
-//         }
-//       }
-//     ]);
+    var router2 = dolman.router([
+      {
+        url: '/goodbye',
+        name: 'goodbye',
+        description: 'Good Bye.',
+        action: function(req, res) {
+          return res.ok({goodbye: 'world'});
+        }
+      }
+    ]);
 
-//     app.use(router1);
-//     app.use('/nested', router2);
+    app.use(router1);
+    app.use('/nested', router2);
 
-//     var specs = dolman.specs(app);
+    var specs = dolman.specs(app);
 
-//     console.log(specs);
-//   });
-// });
+    assert.deepEqual(specs, {
+      formats: ['json'],
+      methods: {
+        hello: {
+          path: '/hello',
+          name: 'hello',
+          description: 'Say hello.'
+        },
+        greet: {
+          path: '/greet/:name',
+          name: 'greet'
+        },
+        goodbye: {
+          path: '/nested/goodbye',
+          name: 'goodbye',
+          description: 'Good Bye.'
+        }
+      }
+    });
+  });
+});

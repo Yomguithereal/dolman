@@ -92,33 +92,57 @@ module.exports = function(express, opts) {
     var routes = {};
 
     // Reducing the app's recursive stack
-    function reduceStack(url, items, item) {
+    function reduceStack(path, items, item) {
       var subStack = [];
 
       if (item.handle && item.handle.stack) {
-        var nextUrl = join(url, (item.path || unescapeRegex(item.regexp) || ''));
-        return items.concat(item.handle.stack.reduce(reduceStack.bind(null, nextUrl), []));
+        var nextPath = join(path, (item.path || unescapeRegex(item.regexp) || ''));
+        return items.concat(item.handle.stack.reduce(reduceStack.bind(null, nextPath), []));
       }
 
       if (item.route) {
-        var nextUrl = join(url, (item.route.path || ''));
-        return items.concat(item.route.stack.reduce(reduceStack.bind(null, nextUrl), []));
+        var nextPath = join(path, (item.route.path || ''));
+        return items.concat(item.route.stack.reduce(reduceStack.bind(null, nextPath), []));
       }
 
       return items.concat({
         handle: item.handle,
-        url: url
+        path: path
       });
     }
 
     // Filtering the actions coming from dolman
-    var stack = app._router.stack
+    app._router.stack
       .reduce(reduceStack.bind(null, ''), [])
+      .map(function(item) {
+        return {
+          route: routesMap.get(item.handle),
+          path: item.path
+        };
+      })
       .filter(function(item) {
-        return routesMap.get(item.handle);
+        return item.route && item.route.name;
+      })
+      .forEach(function(item) {
+        var route = item.route;
+
+        var routeData = {
+          path: item.path,
+          name: route.name
+        };
+
+        ['description'].forEach(function(k) {
+          if (route[k])
+            routeData[k] = route[k];
+        });
+
+        routes[route.name] = routeData;
       });
 
-    return routes;
+    return {
+      formats: ['json'],
+      methods: routes
+    };
   }
 
   // Returning an object to handle
