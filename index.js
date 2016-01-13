@@ -45,11 +45,13 @@ module.exports = function(express, opts) {
       if (!route.url)
         throw Error('dolman.router: one route has no url: ' + util.inspect(route));
 
-      if (!route.action)
+      if (!route.action && !route.actions)
         throw Error('dolman.router: the route for url ' + route.url + ' has no action.');
 
+      var actions = [].concat(route.actions || route.action);
+
       // Storing the route
-      routesMap.set(route.action, route);
+      routesMap.set(actions[0], route);
 
       // Applying before middlewares
       var routeMiddlewares = [];
@@ -77,7 +79,7 @@ module.exports = function(express, opts) {
           router,
           [route.url]
             .concat(routeMiddlewares)
-            .concat(route.action)
+            .concat(actions)
         );
       });
     });

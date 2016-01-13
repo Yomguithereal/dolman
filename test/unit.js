@@ -178,6 +178,31 @@ describe('Router', function() {
     }, done);
   });
 
+  it('passing multiple actions should work.', function(done) {
+    var app = express();
+
+    var router = dolman.router([
+      {
+        url: '/hello',
+        actions: [
+          function(req, res, next) {
+            req.message = {hello: 'world'};
+            return next();
+          },
+          function(req, res) {
+            return res.json(req.message);
+          }
+        ]
+      }
+    ]);
+
+    app.use(router);
+
+    request(app)
+      .get('/hello')
+      .expect(200, {hello: 'world'}, done);
+  });
+
   it('validation middleware should work.', function(done) {
 
     var controller = [
