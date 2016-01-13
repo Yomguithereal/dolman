@@ -127,11 +127,13 @@ module.exports = function(express, opts) {
         return item.route && item.route.name;
       })
       .forEach(function(item) {
-        var route = item.route;
+        var route = item.route,
+            method = [].concat(route.method || route.methods)[0];
 
         var routeData = {
           path: item.path,
-          name: route.name
+          name: route.name,
+          method: !method || method === 'ALL' ? 'GET' : method
         };
 
         ['description'].forEach(function(k) {

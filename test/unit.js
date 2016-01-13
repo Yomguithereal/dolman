@@ -576,6 +576,7 @@ describe('Specifications', function() {
       {
         url: '/greet/:name',
         name: 'greet',
+        method: 'POST',
         action: function(req, res) {
           return res.ok({hello: req.params.name});
         }
@@ -586,6 +587,7 @@ describe('Specifications', function() {
       {
         url: '/goodbye',
         name: 'goodbye',
+        methods: ['PUT', 'POST'],
         description: 'Good Bye.',
         action: function(req, res) {
           return res.ok({goodbye: 'world'});
@@ -604,16 +606,19 @@ describe('Specifications', function() {
         hello: {
           path: '/hello',
           name: 'hello',
-          description: 'Say hello.'
+          description: 'Say hello.',
+          method: 'GET'
         },
         greet: {
           path: '/greet/:name',
-          name: 'greet'
+          name: 'greet',
+          method: 'POST'
         },
         goodbye: {
           path: '/nested/goodbye',
           name: 'goodbye',
-          description: 'Good Bye.'
+          description: 'Good Bye.',
+          method: 'PUT'
         }
       }
     });
