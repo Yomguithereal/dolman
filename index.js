@@ -45,10 +45,10 @@ module.exports = function(express, opts) {
       if (!route.url)
         throw Error('dolman.router: one route has no url: ' + util.inspect(route));
 
-      if (!route.action && !route.actions)
+      if (!route.action)
         throw Error('dolman.router: the route for url ' + route.url + ' has no action.');
 
-      var actions = [].concat(route.actions || route.action);
+      var actions = [].concat(route.action);
 
       // Storing the route
       routesMap.set(actions[0], route);

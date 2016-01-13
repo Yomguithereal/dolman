@@ -184,7 +184,7 @@ describe('Router', function() {
     var router = dolman.router([
       {
         url: '/hello',
-        actions: [
+        action: [
           function(req, res, next) {
             req.message = {hello: 'world'};
             return next();

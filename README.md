@@ -130,8 +130,8 @@ A route can be described likewise:
     return res.ok({hello: req.params.name});
   },
 
-  // You can alternatively pass an array of actions
-  actions: [fn1, fn2],
+  // You can alternatively pass an array of functions
+  action: [fn1, fn2],
 
   // [optional] - The route's name.
   name: 'hello',
