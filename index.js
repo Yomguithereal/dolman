@@ -35,11 +35,8 @@ module.exports = function(express, opts) {
   /**
    * Router function.
    */
-  function makeRouter(routes, o) {
-    o = o || {};
-
-    var router = express.Router(),
-        after = [].concat(o.after || []);
+  function makeRouter(routes) {
+    var router = express.Router();
 
     routes.forEach(function(route) {
       if (!route.url)
@@ -67,9 +64,6 @@ module.exports = function(express, opts) {
       // HTTP cache
       if (route.httpCache)
         routeMiddlewares.push(middlewares.httpCache(route.httpCache));
-
-      // Applying after middlewares
-      routeMiddlewares = routeMiddlewares.concat(after);
 
       // Determining the method
       var methods = [].concat(route.method || route.methods || 'ALL');
