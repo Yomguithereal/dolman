@@ -19,22 +19,10 @@ var customTypes = new Typology({
 });
 
 /**
- * Helpers.
- */
-function makeApp(controller) {
-  var app = express(),
-      router = dolman.router(controller);
-
-  app.use('/dolman', router);
-
-  return app;
-}
-
-/**
  * Responses.
  */
 describe('Responses', function() {
-  var dolman = wrap(express);
+  wrap(express);
 
   var RESPONSES = [
     {method: 'ok', code: 200},

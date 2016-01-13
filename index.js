@@ -89,15 +89,15 @@ module.exports = function(express, opts) {
 
     // Reducing the app's recursive stack
     function reduceStack(path, items, item) {
-      var subStack = [];
+      var nextPath;
 
       if (item.handle && item.handle.stack) {
-        var nextPath = join(path, (item.path || unescapeRegex(item.regexp) || ''));
+        nextPath = join(path, (item.path || unescapeRegex(item.regexp) || ''));
         return items.concat(item.handle.stack.reduce(reduceStack.bind(null, nextPath), []));
       }
 
       if (item.route) {
-        var nextPath = join(path, (item.route.path || ''));
+        nextPath = join(path, (item.route.path || ''));
         return items.concat(item.route.stack.reduce(reduceStack.bind(null, nextPath), []));
       }
 

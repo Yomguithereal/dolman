@@ -12,7 +12,7 @@ module.exports = function(express) {
    * Ok.
    */
   response.ok = function(result) {
-    var response = {
+    var data = {
       status: 'ok',
       code: 200,
       result: result
@@ -21,14 +21,14 @@ module.exports = function(express) {
     if (this.__shouldBeCached)
       this.__sentData = result;
 
-    return this.json(response);
+    return this.json(data);
   };
 
   /**
    * Created.
    */
   response.created = function(result) {
-    var response = {
+    var data = {
       status: 'ok',
       code: 201,
       result: result
@@ -37,14 +37,14 @@ module.exports = function(express) {
     if (this.__shouldBeCached)
       this.__sentData = result;
 
-    return this.status(201).json(response);
+    return this.status(201).json(data);
   };
 
   /**
    * Bad request.
    */
   response.badRequest = function(reason) {
-    var response = {
+    var data = {
       status: 'error',
       code: 400,
       error: {
@@ -53,9 +53,9 @@ module.exports = function(express) {
     };
 
     if (reason)
-      response.error.reason = reason;
+      data.error.reason = reason;
 
-    return this.status(400).json(response);
+    return this.status(400).json(data);
   };
 
   /**
@@ -88,7 +88,7 @@ module.exports = function(express) {
    * Not Found.
    */
   response.notFound = function(reason) {
-    var response = {
+    var data = {
       status: 'error',
       code: 404,
       error: {
@@ -97,9 +97,9 @@ module.exports = function(express) {
     };
 
     if (reason)
-      response.error.reason = reason;
+      data.error.reason = reason;
 
-    this.status(404).json(response);
+    this.status(404).json(data);
   };
 
   /**

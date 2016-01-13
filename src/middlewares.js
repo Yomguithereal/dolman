@@ -15,7 +15,9 @@ function cache(store, params) {
   var key = params.key,
       hasher = typeof params.hasher === 'function' ?
         params.hasher :
-        function() { return '$nohash$'; };
+        function() {
+          return '$nohash$';
+        };
 
   // Initializing the store's key
   store[key] = {};
@@ -92,7 +94,7 @@ function validate(types, def) {
         var reason = {
           source: source,
           expecting: def[source],
-          sent: req[source] || {}
+          sent: req[source] || {}
         };
 
         if (source === 'params')
@@ -104,7 +106,7 @@ function validate(types, def) {
 
     return next();
   };
-};
+}
 
 module.exports = {
   cache: cache,
