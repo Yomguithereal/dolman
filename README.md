@@ -110,11 +110,12 @@ var router = dolman.router([
   }
 ]);
 
+// Creating the same router with beforehand authentication
+var router = dolman.router(authMiddleware, routes);
+
 app.use(router);
-// or
+// or to use a namespace
 app.use('/prefix', router);
-// or, typically, if you need some kind of auth
-app.use('/prefix', authMiddleware, router);
 ```
 
 A route can be described likewise:

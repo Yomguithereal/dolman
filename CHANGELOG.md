@@ -3,6 +3,7 @@
 ## 0.3.0
 
 * Adding possibility to pass multiple functions as action.
+* Adding possibility to pass middlewares before routes.
 
 ## 0.2.0
 

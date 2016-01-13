@@ -35,7 +35,14 @@ module.exports = function(express, opts) {
   /**
    * Router function.
    */
-  function makeRouter(routes) {
+  function makeRouter() {
+
+    // Solving arguments
+    var args = [].slice.call(arguments);
+
+    var beforeMiddlewares = args.slice(0, -1),
+        routes = args[args.length - 1];
+
     var router = express.Router();
 
     routes.forEach(function(route) {
@@ -51,7 +58,7 @@ module.exports = function(express, opts) {
       routesMap.set(actions[0], route);
 
       // Applying before middlewares
-      var routeMiddlewares = [];
+      var routeMiddlewares = beforeMiddlewares.slice();
 
       // Validation
       if (route.validate)
