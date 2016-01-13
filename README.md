@@ -15,7 +15,6 @@ As such, dolman overload express' response object to provide handy methods such 
   * [Router](#router)
   * [Specs](#specs)
 * [What on earth is a dolman?](#explanation)
-* [Roadmap](#roadmap)
 * [License](#license)
 
 ## Installation
@@ -231,13 +230,6 @@ Note that **dolman** will only output your routes having a name.
 <h2 id="explanation">What on earth is a dolman?</h2>
 
 A [dolman](https://en.wikipedia.org/wiki/Dolman) is a loose garment with narrow sleeves, an opening in the front and lavish braids. While originating from Turkey, this garment was mostly worn as a jacket by hussars.
-
-## Roadmap
-
-* Declarative way to transform some params?
-* Default values for data?
-* Object polymorphism for the controller?
-* Ways to clear the cache.
 
 ## License
 
