@@ -4,7 +4,7 @@
 
 * Adding possibility to pass multiple functions as action.
 * Adding possibility to pass middlewares before routes.
-* Adding method field to specs.
+* Adding method field to `dolman.specs` output.
 
 ## 0.2.0
 
