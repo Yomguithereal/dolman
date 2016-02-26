@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+* Fixing `typology` dependency's scheme.
+
 ## 0.3.0
 
 * Adding possibility to pass multiple functions as action.

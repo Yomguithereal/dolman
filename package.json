@@ -1,6 +1,6 @@
 {
   "name": "dolman",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Light express app wrapper to develop an API comfortably.",
   "main": "index.js",
   "scripts": {
