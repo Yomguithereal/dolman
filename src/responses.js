@@ -5,7 +5,7 @@
  * Overloading an express app's Response object to provide the user with handy
  * and semantic method to send back data to the client.
  */
-module.exports = function(app) {
+module.exports = function(app, logger) {
   var response = app.response;
 
   /**
@@ -106,10 +106,8 @@ module.exports = function(app) {
    * Server Error.
    */
   response.serverError = function(err) {
-
-    // TEMP: dev logging
     if (err)
-      console.log(err);
+      logger.error(err);
 
     this.status(500).json({
       status: 'error',

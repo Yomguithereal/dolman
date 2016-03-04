@@ -5,7 +5,7 @@
  * Exposing the library's utilities.
  */
 var responses = require('./src/responses.js'),
-    // createLogger = require('./src/createLogger.js'),
+    createLogger = require('./src/createLogger.js'),
     middlewares = require('./src/middlewares.js'),
     unescapeRegex = require('./src/unescape.js'),
     express = require('express'),
@@ -16,8 +16,14 @@ var responses = require('./src/responses.js'),
 module.exports = function(app, opts) {
   opts = opts || {};
 
+  // Creating the logger
+  var logger = opts.logger;
+
+  if (!logger)
+    logger = createLogger('logger' in opts && !opts.logger);
+
   // Applying responses to express
-  responses(app);
+  responses(app, logger);
 
   // Building internal typology
   var types;
