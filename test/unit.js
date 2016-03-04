@@ -584,7 +584,7 @@ describe('Specifications', function() {
     app.use(router1);
     app.use('/nested', router2);
 
-    var specs = dolman.specs(app);
+    var specs = dolman.specs();
 
     assert.deepEqual(specs, {
       formats: ['json'],
