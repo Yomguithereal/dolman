@@ -7,7 +7,6 @@
 var responses = require('./src/responses.js'),
     middlewares = require('./src/middlewares.js'),
     unescapeRegex = require('./src/unescape.js'),
-    HashMap = require('./src/hashmap.js'),
     Typology = require('typology'),
     join = require('path').join,
     util = require('util');
@@ -27,7 +26,7 @@ module.exports = function(express, opts) {
     types = new Typology(opts.typology || {});
 
   // Internal route register
-  var routesMap = new HashMap();
+  var routesMap = new Map();
 
   // Internal RAM cache
   var cache = {};
