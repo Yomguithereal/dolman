@@ -2,11 +2,11 @@
  * Dolman Responses
  * =================
  *
- * Overloading the express Response object to provide the user with handy
+ * Overloading an express app's Response object to provide the user with handy
  * and semantic method to send back data to the client.
  */
-module.exports = function(express) {
-  var response = express.response;
+module.exports = function(app) {
+  var response = app.response;
 
   /**
    * Ok.
@@ -61,7 +61,7 @@ module.exports = function(express) {
   /**
    * Unauthorized.
    */
-  express.response.unauthorized = function() {
+  response.unauthorized = function() {
     this.status(401).json({
       status: 'error',
       code: 401,
@@ -74,7 +74,7 @@ module.exports = function(express) {
   /**
    * Forbidden.
    */
-  express.response.forbidden = function() {
+  response.forbidden = function() {
     this.status(403).json({
       status: 'error',
       code: 403,

@@ -22,8 +22,6 @@ var customTypes = new Typology({
  * Responses.
  */
 describe('Responses', function() {
-  wrap(express);
-
   var RESPONSES = [
     {method: 'ok', code: 200},
     {method: 'created', code: 201},
@@ -35,13 +33,19 @@ describe('Responses', function() {
   ];
 
   it('express\'s responses should have been enhanced.', function() {
+    var app = express();
+
+    wrap(app);
+
     RESPONSES.forEach(function(response) {
-      assert(typeof express.response[response.method] === 'function');
+      assert(typeof app.response[response.method] === 'function');
     });
   });
 
   it('an app should return the correct codes.', function(done) {
     var app = express();
+
+    wrap(app);
 
     RESPONSES.forEach(function(response) {
 
@@ -63,11 +67,12 @@ describe('Responses', function() {
  * Router.
  */
 describe('Router', function() {
-  var dolman;
+  var dolman,
+      app;
 
   beforeEach(function() {
-    dolman = null;
-    dolman = wrap(express, {typology: customTypes});
+    app = express();
+    dolman = wrap(app, {typology: customTypes});
   });
 
   describe('Basics', function() {
@@ -94,8 +99,6 @@ describe('Router', function() {
     });
 
     it('basic routes should work.', function(done) {
-      var app = express();
-
       var router = dolman.router([
         {
           url: '/test',
@@ -117,8 +120,6 @@ describe('Router', function() {
     });
 
     it('method(s) should work.', function(done) {
-      var app = express();
-
       var action = function(req, res) {
         return res.ok();
       };
@@ -168,8 +169,6 @@ describe('Router', function() {
     });
 
     it('passing multiple actions should work.', function(done) {
-      var app = express();
-
       var router = dolman.router([
         {
           url: '/hello',
@@ -193,8 +192,6 @@ describe('Router', function() {
     });
 
     it('should be possible to pass series of middlewares before the routes.', function(done) {
-      var app = express();
-
       var authName = function(req, res, next) {
         if (req.query.name === 'John')
           return next();
@@ -274,8 +271,6 @@ describe('Router', function() {
           }
         }
       ];
-
-      var app = express();
 
       app.use(bodyParser.json());
 
@@ -361,8 +356,7 @@ describe('Router', function() {
 
   describe('Cache', function() {
     it('RAM cache middleware should work.', function(done) {
-      var app = express(),
-          one = 0,
+      var one = 0,
           two = 0;
 
       var router = dolman.router([
@@ -445,8 +439,6 @@ describe('Router', function() {
     });
 
     it('HTTP cache middleware should work.', function(done) {
-      var app = express();
-
       var val1 = 'public, max-age=3600',
           val2 = 'private, max-age=59', // 59 seconds
           val3 = 'private, max-age=60', // 1 minute
@@ -528,7 +520,6 @@ describe('Router', function() {
     });
 
     it('HTTP cache middle should throw an error on unexpected params.', function(done) {
-      var app = express();
       var router;
 
       function setup() {
@@ -554,15 +545,10 @@ describe('Router', function() {
  * Specifications.
  */
 describe('Specifications', function() {
-  var dolman;
-
-  beforeEach(function() {
-    dolman = null;
-    dolman = wrap(express);
-  });
 
   it('should be possible to retrieve our app\'s specifications.', function() {
-    var app = express();
+    var app = express(),
+        dolman = wrap(app);
 
     var router1 = dolman.router([
       {

@@ -5,17 +5,19 @@
  * Exposing the library's utilities.
  */
 var responses = require('./src/responses.js'),
+    // createLogger = require('./src/createLogger.js'),
     middlewares = require('./src/middlewares.js'),
     unescapeRegex = require('./src/unescape.js'),
+    express = require('express'),
     Typology = require('typology'),
     join = require('path').join,
     util = require('util');
 
-module.exports = function(express, opts) {
+module.exports = function(app, opts) {
   opts = opts || {};
 
   // Applying responses to express
-  responses(express);
+  responses(app);
 
   // Building internal typology
   var types;
@@ -90,7 +92,7 @@ module.exports = function(express, opts) {
   /**
    * Specifications functions.
    */
-  function specs(app) {
+  function specs() {
     var routes = {};
 
     // Reducing the app's recursive stack
