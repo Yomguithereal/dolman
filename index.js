@@ -7,7 +7,7 @@
 var responses = require('./src/responses.js'),
     createLogger = require('./src/createLogger.js'),
     middlewares = require('./src/middlewares.js'),
-    unescapeRegex = require('./src/unescape.js'),
+    helpers = require('./src/helpers.js'),
     express = require('express'),
     Typology = require('typology'),
     join = require('path').join,
@@ -22,9 +22,6 @@ module.exports = function(app, opts) {
   if (!logger)
     logger = createLogger('logger' in opts && !opts.logger);
 
-  // Applying responses to express
-  responses(app, logger);
-
   // Building internal typology
   var types;
 
@@ -32,6 +29,9 @@ module.exports = function(app, opts) {
     types = opts.typology;
   else
     types = new Typology(opts.typology || {});
+
+  // Applying responses to the express app
+  responses(app, logger, types);
 
   // Internal route register
   var routesMap = new Map();
@@ -71,6 +71,10 @@ module.exports = function(app, opts) {
       if (route.validate)
         routeMiddlewares.push(middlewares.validate(types, route.validate));
 
+      // Mask
+      if (route.mask)
+        routeMiddlewares.push(middlewares.mask(route.mask));
+
       // RAM cache
       if (route.cache)
         routeMiddlewares.push(middlewares.cache(cache, route.cache));
@@ -106,7 +110,7 @@ module.exports = function(app, opts) {
       var nextPath;
 
       if (item.handle && item.handle.stack) {
-        nextPath = join(path, (item.path || unescapeRegex(item.regexp) || ''));
+        nextPath = join(path, (item.path || helpers.unescapeRegex(item.regexp) || ''));
         return items.concat(item.handle.stack.reduce(reduceStack.bind(null, nextPath), []));
       }
 

@@ -77,6 +77,16 @@ function httpCache(params) {
 }
 
 /**
+ * Applying a mask on output data.
+ */
+function mask(def) {
+  return function(req, res, next) {
+    res.__mask = def;
+    return next();
+  };
+}
+
+/**
  * Factory building a validation middleware working for the given definition.
  */
 function validate(types, def) {
@@ -111,5 +121,6 @@ function validate(types, def) {
 module.exports = {
   cache: cache,
   httpCache: httpCache,
+  mask: mask,
   validate: validate
 };

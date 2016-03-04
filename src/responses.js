@@ -5,7 +5,7 @@
  * Overloading an express app's Response object to provide the user with handy
  * and semantic method to send back data to the client.
  */
-module.exports = function(app, logger) {
+module.exports = function(app, logger, types) {
   var response = app.response;
 
   /**
