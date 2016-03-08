@@ -5,40 +5,68 @@
  * Overloading an express app's Response object to provide the user with handy
  * and semantic method to send back data to the client.
  */
+var helpers = require('./helpers.js');
+
+var isPlainObject = helpers.isPlainObject;
+
 module.exports = function(app, logger, types) {
   var response = app.response;
+
+  function applyMask(object, def) {
+    var output = {};
+
+    if (!isPlainObject(object) || !isPlainObject(def))
+      return object;
+
+    for (var k in def)
+      output[k] = applyMask(object[k], def[k]);
+
+    return output;
+  }
+
+  function makeSuccess(code) {
+    return function(result) {
+      var maskedResult = result,
+          def;
+
+      // Do we need to apply a mask?
+      if (this.__mask) {
+        def = this.__mask;
+
+        // We only keep relevant keys
+        maskedResult = applyMask(result, def);
+
+        // Then we check is the sent data does abide to the definition
+        if (!types.check(def, maskedResult)) {
+          logger.warn('Mask Warning', {
+            mask: def,
+            data: result
+          });
+        }
+      }
+
+      var data = {
+        status: 'ok',
+        code: code,
+        result: maskedResult
+      };
+
+      if (this.__shouldBeCached)
+        this.__sentData = maskedResult;
+
+      return this.status(code).json(data);
+    };
+  }
 
   /**
    * Ok.
    */
-  response.ok = function(result) {
-    var data = {
-      status: 'ok',
-      code: 200,
-      result: result
-    };
-
-    if (this.__shouldBeCached)
-      this.__sentData = result;
-
-    return this.json(data);
-  };
+  response.ok = makeSuccess(200);
 
   /**
    * Created.
    */
-  response.created = function(result) {
-    var data = {
-      status: 'ok',
-      code: 201,
-      result: result
-    };
-
-    if (this.__shouldBeCached)
-      this.__sentData = result;
-
-    return this.status(201).json(data);
-  };
+  response.created = makeSuccess(201);
 
   /**
    * Bad request.
@@ -107,7 +135,7 @@ module.exports = function(app, logger, types) {
    */
   response.serverError = function(err) {
     if (err)
-      logger.error(err);
+      logger.error('Server Error', err);
 
     this.status(500).json({
       status: 'error',

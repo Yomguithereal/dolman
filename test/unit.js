@@ -9,6 +9,7 @@ var Typology = require('typology'),
     bodyParser = require('body-parser'),
     request = require('supertest'),
     assert = require('assert'),
+    sinon = require('sinon'),
     async = require('async'),
     wrap = require('../index.js');
 
@@ -537,6 +538,68 @@ describe('Router', function() {
 
       assert.throws(setup, Error);
       request(app).get('/foo').end(done);
+    });
+  });
+
+  describe('Masks', function() {
+
+    it('masks should clamp sent data.', function(done) {
+      var router = dolman.router([
+        {
+          url: '/masked',
+          mask: {
+            one: 'number',
+            two: 'number'
+          },
+          action: function(req, res) {
+            return res.ok({
+              one: 1,
+              two: 2,
+              three: 3
+            });
+          }
+        }
+      ]);
+
+      app.use(router);
+
+      request(app)
+        .get('/masked')
+        .expect(200, {
+          status: 'ok',
+          code: 200,
+          result: {
+            one: 1,
+            two: 2
+          }
+        }, done);
+    });
+
+    it('masks should warn the user when sent data is not valid.', function(done) {
+      var spy = sinon.spy(),
+          logger = {warn: spy, error: spy};
+
+      app = express();
+      dolman = wrap(app, {logger: logger});
+
+      var router = dolman.router([
+        {
+          url: '/primitive',
+          mask: 'number',
+          action: function(req, res) {
+            return res.ok('hello');
+          }
+        }
+      ]);
+
+      app.use(router);
+
+      request(app)
+        .get('/primitive')
+        .expect(200, function() {
+          assert(spy.called);
+          done();
+        });
     });
   });
 });
