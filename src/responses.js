@@ -18,8 +18,10 @@ module.exports = function(app, logger, types) {
     if (!isPlainObject(object) || !isPlainObject(def))
       return object;
 
-    for (var k in def)
-      output[k] = applyMask(object[k], def[k]);
+    for (var k in def) {
+      if (k in object)
+        output[k] = applyMask(object[k], def[k]);
+    }
 
     return output;
   }

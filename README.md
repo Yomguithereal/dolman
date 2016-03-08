@@ -180,6 +180,12 @@ A route can be described likewise:
   // Or, shorthand and fluent way to set 'private, max-age':
   httpCache: {
     hours: 2 // seconds, minutes, hours, days, weeks
+  },
+
+  // [optional] - A typology definition used to valid and clamp the data output.
+  mask: {
+    name: 'string',
+    age: '?number'
   }
 }
 ```
