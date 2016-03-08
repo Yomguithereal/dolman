@@ -40,6 +40,14 @@ var dolman = wrap(app);
 
 // Example with a custom typology:
 var dolman = wrap(app, {typology: myCustomTypology});
+
+// Example with a custom logger:
+var dolman = wrap(app, {
+  logger: {
+    error: function(msg, data) {},
+    warn: ...
+  }
+});
 ```
 
 ### Responses
