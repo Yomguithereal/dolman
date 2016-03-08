@@ -186,7 +186,7 @@ A route can be described likewise:
     hours: 2 // seconds, minutes, hours, days, weeks
   },
 
-  // [optional] - A typology definition used to valid and clamp the data output.
+  // [optional] - A typology definition used to check and clamp the data output.
   mask: {
     name: 'string',
     age: '?number'
