@@ -212,7 +212,7 @@ var router = dolman.router([
 
 app.use('/nested', router);
 
-dolman.specs(app);
+dolman.specs();
 >>> {
   formats: ['json'],
   methods: {

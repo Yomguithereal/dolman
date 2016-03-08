@@ -1,10 +1,11 @@
 # Changelog
 
-## 0.4.0 or 1.0.0
+## 0.4.0
 
 * Dolman now wraps the express app rather than the express dependency (breaking).
 * Adding the `logger` option.
 * Adding `mask`.
+* Changing the arity of `dolman.specs`.
 
 ## 0.3.1
 
