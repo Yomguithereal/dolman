@@ -33,11 +33,13 @@ npm install --save dolman
 var express = require('express'),
     wrap = require('dolman');
 
-// Wrapping express & providing some options:
-var dolman = wrap(express);
+var app = express();
+
+// Wrapping the express app & providing some options:
+var dolman = wrap(app);
 
 // Example with a custom typology:
-var dolman = wrap(express, {typology: myCustomTypology});
+var dolman = wrap(app, {typology: myCustomTypology});
 ```
 
 ### Responses
@@ -45,7 +47,8 @@ var dolman = wrap(express, {typology: myCustomTypology});
 A wrapped express app will have an enhanced response object:
 
 ```js
-var app = express();
+var app = express(),
+    dolman = wrap(app);
 
 app.get('/hello', function(req, res) {
   return res.ok({hello: 'world'});
@@ -97,7 +100,8 @@ Note that the responses will be sent as JSON and will follow this standard:
 **dolman** exposes an easy way to create express routers by using lists of configuration objects representing a single route.
 
 ```js
-var app = express();
+var app = express(),
+    dolman = wrap(app);
 
 // Creating a router with a single route
 var router = dolman.router([
