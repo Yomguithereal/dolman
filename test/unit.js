@@ -575,6 +575,48 @@ describe('Router', function() {
         }, done);
     });
 
+    it('masks should also clamp collections.', function(done) {
+      var router = dolman.router([
+        {
+          url: '/masked',
+          mask: [{name: 'string', age: 'number'}],
+          action: function(req, res) {
+            return res.ok([
+              {
+                name: 'John',
+                surname: 'White',
+                age: 45
+              },
+              {
+                name: 'Jack',
+                surname: 'Black',
+                age: 56
+              }
+            ]);
+          }
+        }
+      ]);
+
+      app.use(router);
+
+      request(app)
+        .get('/masked')
+        .expect(200, {
+          status: 'ok',
+          code: 200,
+          result: [
+            {
+              name: 'John',
+              age: 45
+            },
+            {
+              name: 'Jack',
+              age: 56
+            }
+          ]
+        }, done);
+    });
+
     it('masks should warn the user when sent data is not valid.', function(done) {
       var spy = sinon.spy(),
           logger = {warn: spy, error: spy};

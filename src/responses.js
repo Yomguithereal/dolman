@@ -13,12 +13,28 @@ module.exports = function(app, logger, types) {
   var response = app.response;
 
   function applyMask(object, def) {
-    var output = {};
+    var output = {},
+        k,
+        i,
+        l;
+
+    if (Array.isArray(def)) {
+      if (!Array.isArray(object))
+        return object;
+
+      output = [];
+      for (i = 0, l = object.length; i < l; i++) {
+        output.push(applyMask(object[i], def[0]));
+      }
+
+      return output;
+    }
 
     if (!isPlainObject(object) || !isPlainObject(def))
       return object;
 
-    for (var k in def) {
+    // TODO: optimize function call here?
+    for (k in def) {
       if (k in object)
         output[k] = applyMask(object[k], def[k]);
     }
