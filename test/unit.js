@@ -627,9 +627,9 @@ describe('Router', function() {
       var router = dolman.router([
         {
           url: '/primitive',
-          mask: 'number',
+          mask: { foo: 'number' },
           action: function(req, res) {
-            return res.ok('hello');
+            return res.ok({ foo: 'hello', bar: 'forbidden' });
           }
         }
       ]);
@@ -640,6 +640,10 @@ describe('Router', function() {
         .get('/primitive')
         .expect(200, function() {
           assert(spy.called);
+          assert.deepEqual(spy.args[0][1], {
+            mask: { foo: 'number' },
+            data: { foo: 'hello' },
+          });
           done();
         });
     });
