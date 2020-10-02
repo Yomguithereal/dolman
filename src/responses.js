@@ -58,7 +58,7 @@ module.exports = function(app, logger, types) {
         if (!types.check(def, maskedResult)) {
           logger.warn('Mask Warning', {
             mask: def,
-            data: result
+            data: maskedResult
           });
         }
       }
